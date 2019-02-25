@@ -10,6 +10,24 @@ import UIKit
 
 class LoginViewController: UIViewController {
 
+    @IBAction func LoginButton(_ sender: Any) {
+        let myUrl = "https://api.twitter.com/oauth/request_token"
+        
+        TwitterAPICaller.client?.login(url: myUrl, success: {
+            UserDefaults.standard.set(true, forKey: "loggedIn") //everytime you log in its gonna create a variable called loggedIn and set it to true
+            self.performSegue(withIdentifier: "loginToHome", sender: self)
+        }, failure: { (Error) in
+            print ("could not login")
+        })
+    }
+    
+    //this function makes sure the user stays logged in after closing the app
+    override func viewDidAppear(_ animated: Bool) {
+        if UserDefaults.standard.bool(forKey: "loggedIn") == true {
+            self.performSegue(withIdentifier: "loginToHome", sender: self)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
